@@ -12,7 +12,7 @@
 
 ## [保存 View 状态](http://www.codeceo.com/article/android-save-view-state.html)
 
-1. 系统 View 只需要有 id 就能自动保存状态，内部已实现
+系统 View 只需要有 id 就能自动保存状态，内部已实现
 
 自定义 View 保存状态
 
@@ -44,10 +44,12 @@ onCreate -> onStart -> onRestoreInstanceState -> onResume
 
 1. 减少页面间依赖，少使用全局变量，注意保存数据，使每个页面都能正常恢复
 2. 判断如果是恢复状态，则再判断一下中间页流程是否正常，不正常就直接启动第一个页面，清除现有堆栈
+
 	```
 	Intent starter = new Intent(context, AActivity.class);
 	starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	```
+	
 activity 的 `android:alwaysRetainTaskState` 默认 false，30分钟后不保存任务栈，没找到测试方法。
 
 ## 模拟杀应用
