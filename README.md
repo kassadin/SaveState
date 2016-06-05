@@ -16,7 +16,7 @@
 
 自定义 View 保存状态
 
-1. 设置 idd
+1. 设置 id
 2. 要调用 setSaveEnabled(true)
 3. 实现 View.BaseSavedState， 在 onSaveInstanceState、onRestoreInstanceState 中保存恢复状态
 
@@ -58,5 +58,16 @@ activity 的 `android:alwaysRetainTaskState` 默认 false，30分钟后不保存
 2. adb shell am kill [com.xxx.app]
 
 没找到更好的方法
+
+## Application 里 getApplicationContext 就是自己
+
+```
+ Context applicationContext = getApplicationContext();
+Log.d("app", String.valueOf(applicationContext == this)); // true
+```
+
+## 退出应用
+
+退出应用后` AppContexts: 1   Activities: 0`，可以检查下是否存在内存泄露
 
 

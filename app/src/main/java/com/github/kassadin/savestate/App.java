@@ -1,6 +1,8 @@
 package com.github.kassadin.savestate;
 
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 
@@ -18,6 +20,9 @@ public class App extends Application {
         Logger.init();
         Logger.d("App start !!!");
         mInstance = this;
+
+        Context applicationContext = getApplicationContext();
+        Log.d("app", String.valueOf(applicationContext == this));
     }
 
     public static App getInstance() {
