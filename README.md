@@ -68,6 +68,39 @@ Log.d("app", String.valueOf(applicationContext == this)); // true
 
 ## 退出应用
 
-退出应用后` AppContexts: 1   Activities: 0`，可以检查下是否存在内存泄露
+退出应用后 activity 应当全部释放，应用状态应当是 ` AppContexts: 1   Activities: 0`，可以检查下是否存在内存泄露
+
+## Fragment 重叠问题
+
+[Android fragment 重叠问题的解决方法](http://blog.csdn.net/weizongwei5/article/details/44036543)
+[关于Fragment的那些事、那些坑](http://www.jianshu.com/p/e658ffc02211)
+[知乎相关回答](https://www.zhihu.com/question/39662488/answer/82469372)
+
+当 Activity 销毁时系统是会保存一部分状态的，这其中就包括了 Fragment，在恢复的时候先恢复 Fragment，这也就导致了 Fragment 的重叠问题，解决办法：
+
+1. onSaveInstanceState 时找回 fragment
+
+	```
+	oncreate{
+	mFragmentManager = getSupportFragmentManager();
+	if (savedInstanceState != null) { // 恢复数据
+		mFragment0 = (MainFragment) mFragmentManager.findFragmentByTag("f0");
+		}
+	}
+	```
+
+2. 在可能销毁时，重写onSaveInstanceState，但不保存 Fragment 状态
+	1. 注释掉 super，这个处理太粗糙了
+	2. 移除掉 super 保存的 "android:support:fragments"
+
+	```
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// super.onSaveInstanceState(outState);
+		  outState.putParcelable("android:support:fragments", null);
+	}
+	```
+
+
 
 
