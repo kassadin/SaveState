@@ -101,6 +101,53 @@ Log.d("app", String.valueOf(applicationContext == this)); // true
 	}
 	```
 
+## ViewPager 内 Fragment 恢复问题
 
+之前 adapter的写法有问题，导致应用被杀恢复后 ViewPager 的 Fragment 会重复创建，一般情况下对应用没什么影响，就是多了个 Fragment 实例，不会被调用，也会随应用的退出而销毁，但是如果 Fragment 内的相关变量的话，会导致 ViewPager 在恢复 Fragment 的时候出问题。
 
+这个是在外部给 Fragment 赋 Presenter 的时候发现的。
+
+```java
+ @Override
+public Object instantiateItem(ViewGroup container, int position) {
+	if (mCurTransaction == null) {
+		mCurTransaction = mFragmentManager.beginTransaction();
+	}
+
+	final long itemId = getItemId(position);
+
+	// Do we already have this fragment?
+	String name = makeFragmentName(container.getId(), itemId);
+	Fragment fragment = mFragmentManager.findFragmentByTag(name);
+	if (fragment != null) {
+		if (DEBUG) Log.v(TAG, "Attaching item #" + itemId + ": f=" + fragment);
+		mCurTransaction.attach(fragment);
+	} else {
+		fragment = getItem(position);
+		if (DEBUG) Log.v(TAG, "Adding item #" + itemId + ": f=" + fragment);
+		mCurTransaction.add(container.getId(), fragment,
+				makeFragmentName(container.getId(), itemId));
+	}
+	if (fragment != mCurrentPrimaryItem) {
+		fragment.setMenuVisibility(false);
+		fragment.setUserVisibleHint(false);
+	}
+
+	return fragment;
+}
+```
+
+Fragment 被找了回来，如果在创建的时候有相关的额外操作，这种恢复方式就会出问题。
+所以 Fragment 需要的东西还是在内部自给自足吧。
+
+另外就是不要自己再用List<Fragment> fragments 这样的形式提前创建 Fragment了，PagerAdapter内有自己的处理，在没找到缓存的 Fragment时才会调用 getItem， 提前创建会导致在恢复时重复创建。
+
+```java
+ private static String makeFragmentName(int viewId, long id) {
+        return "android:switcher:" + viewId + ":" + id;
+    }
+```
+这是 FragmentPagerAdapter 内部给Fragment创Tag的规则，私有的。艹。还是别用了。
+
+所以Fragment的问题就是不缓存、手动创建的自己恢复、ViewPager创建ViewPager恢复。
 
