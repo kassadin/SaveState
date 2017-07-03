@@ -11,66 +11,66 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.d("onCreate, savedInstanceState == null ? %s", savedInstanceState == null ? true : savedInstanceState.toString());
+        Logger.i("onCreate, savedInstanceState == null ? %s", savedInstanceState == null ? true : savedInstanceState.toString());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Logger.d("onStart");
+        Logger.i("onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Logger.d("onResume");
+        Logger.i("onResume");
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Logger.d("onPause");
+        Logger.i("onPause");
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Logger.d("onStop");
+        Logger.i("onStop");
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Logger.d("onDestroy");
+        Logger.i("onDestroy");
 
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Logger.d("onRestart");
+        Logger.i("onRestart");
 
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Logger.d("onRestoreInstanceState");
+        Logger.i("onRestoreInstanceState");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Logger.d("onSaveInstanceState");
+        Logger.i("onSaveInstanceState");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Logger.d("new Intent:%s", intent.getFlags());
+        Logger.i("new Intent:%s", intent.getFlags());
     }
 
     @Override
